@@ -85,7 +85,8 @@ def sieve(urls, aisle, page, database, image_dupe):
         
     return database, verified_urls, filenames, image_dupe
 
-#########victim_website
+#########website_name
+
 s = requests.Session()
 retries = Retry(total=5,
                 backoff_factor=0.1,
@@ -97,6 +98,7 @@ my_file = open("aisle23.txt", "r").read().split("\n")
 driver = webdriver.Firefox()
 aisle_dir = os.listdir()
 #print(my_file)
+
 #########Continuing_download
 
 for i, j in enumerate(my_file):
@@ -132,7 +134,8 @@ for aisle in my_file:
     print('now parsing aisle ', aisle)
     website_kaboom = 'https://www.daraz.pk/' + aisle + '/?'
 
-    #########Total pages
+    #########Figuring out the total pages
+	
     html = webpage('https://www.daraz.pk/' + aisle + '/?' + 'page=1')
     num = html.rfind('?page=') + 6
     if num == 5:
@@ -173,7 +176,7 @@ for aisle in my_file:
     if not os.path.isdir(aisle):
         os.makedirs(aisle)
 
-    #########Crawling
+    #########crawling the pages in range
 
     for page in range(page_current, page_num + 1):
         
