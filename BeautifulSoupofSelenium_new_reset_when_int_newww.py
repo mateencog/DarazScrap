@@ -44,7 +44,7 @@ def sieve(urls, aisle, page, database, image_dupe):
     verified_urls = []
     filenames = []
     for url in urls:
-        result = re.search(r'/([\w_-]+[.](jpg|png))$', url)
+        result = re.search(r'/([\w_-]+[.](jpg|png))$', url) # search for a '.jpg' or '.png' at the end of url?
     
         if not result:
             #print("regex wont match: {}".format(url))
@@ -65,14 +65,14 @@ def sieve(urls, aisle, page, database, image_dupe):
         if 'http' not in url:
             url = '{}{}'.format('https:', url)
             
-        if "live-21.slatic" in url or "static" in url:
+        if "live-21.slatic" in url or "static" in url: # less than 1% are osted with 'slatic' in the url
             #print(url)
             with open(aisle +  '/images_page_'+ str(page) + '/_urls_' + aisle + '_images_page_'+ str(page) + '.txt', 'a') as bn:
                 bn.write('\n')
-                bn.write(url)
+                bn.write(url) # save the urls for future retrieval
             with open(aisle + '/images_page_'+ str(page) + '/_filenames_' + aisle + '_images_page_'+ str(page) + '.txt', 'a') as bo:
                 bo.write('\n')
-                bo.write(filename)
+                bo.write(filename) # save the filenames
             database.add(filename)
             verified_urls.append(url)
             filenames.append(filename)
@@ -85,28 +85,28 @@ def sieve(urls, aisle, page, database, image_dupe):
         
     return database, verified_urls, filenames, image_dupe
 
-#########website_name
+######### website_name
 
 s = requests.Session()
 retries = Retry(total=5,
                 backoff_factor=0.1,
-                status_forcelist=[ 500, 502, 503, 504, 104 ])
+                status_forcelist=[ 500, 502, 503, 504, 104 ]) # common errors often encountered in https
 s.mount('http://', HTTPAdapter(max_retries=retries))
 
 my_file = open("aisle23.txt", "r").read().split("\n")
-# driver = webdriver.Firefox()
+# driver = webdriver.Chrome() # chrome has issues
 driver = webdriver.Firefox()
 aisle_dir = os.listdir()
 #print(my_file)
 
-#########Continuing_download
+######### Continuing_download
 
 for i, j in enumerate(my_file):
     if j not in aisle_dir:
         if i == 0:
             print('starting fresh for the current aisle list')
             page_current = 1
-            database = set()
+            database = set() # initializes a new database for name of each aisle
             break
         print('continuation from ', my_file[i - 1])
         continuation = True
@@ -114,12 +114,12 @@ for i, j in enumerate(my_file):
             progress_path = my_file[i - 1] + '/download.progress'
             #print(progress_path)
             progress = open(progress_path, "r+")
-            page_current = int(progress.readlines()[0]) - 1
+            page_current = int(progress.readlines()[0]) - 1 # figures out the last known dowloaded page which was successful
             if page_current == 0:
                 page_current = 1
             my_file = my_file[ i - 1 : ]
             print('continuation from page ', page_current)
-            database = set()
+            database = set() # workaround until i incorporate reading of all filenames save in txt
         except:
             database = set()
             page_current = 1
