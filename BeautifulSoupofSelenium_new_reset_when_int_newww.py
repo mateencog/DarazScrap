@@ -212,7 +212,8 @@ for aisle in my_file:
     #########Checker Code
         database, verified_urls, filenames, image_dupe = sieve(urls, aisle, page, database, image_dupe)
     
-    #########Stealing metadata
+    #########Taking metadata
+	    
         soup_str = str(soup)
         if "punish" in soup_str:
         	print('got caught, winding up!')
@@ -230,7 +231,8 @@ for aisle in my_file:
   #      except Exception as e:
   #          print('error in meta-stealer', e)
 
-    #########Actual stealing
+    #########Actual Taking
+	    
         aisles = [aisle] * len(verified_urls)
         paths = [path] * len(verified_urls)
         inputs = zip(verified_urls, filenames, aisles , paths, s)
